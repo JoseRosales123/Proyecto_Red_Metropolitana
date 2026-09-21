@@ -30,3 +30,8 @@ gold/
 datos_fuente/
 datos_red/
 bronze/
+
+# dbt
+dbt_red_metropolitana/target/
+dbt_red_metropolitana/logs/
+dbt_red_metropolitana/dbt_packages/
