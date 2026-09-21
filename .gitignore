@@ -17,10 +17,13 @@ Thumbs.db
 # VS Code
 .vscode/
 
-# Datos generados por procesamiento
-staging/
-silver/
-gold/
+# Capas de datos locales generadas
+/staging/
+/silver/
+/gold/
+/bronze/
+/datos_fuente/
+/datos_red/
 
 # Credenciales / secretos
 *.key
