@@ -1,0 +1,32 @@
+# Entorno virtual
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Variables de entorno
+.env
+
+# Archivos temporales
+*.log
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Datos generados por procesamiento
+staging/
+silver/
+gold/
+
+# Credenciales / secretos
+*.key
+*.pem
+
+# Datos fuente y capas generadas
+datos_fuente/
+datos_red/
+bronze/
