@@ -1,0 +1,53 @@
+{
+    "corrida_id": "20260922_012016",
+    "metricas": {
+        "staging": {
+            "transmetro": 363221,
+            "transurbano": 832791,
+            "metroriel": 299100,
+            "aerometro": 203554,
+            "cdc": 31050
+        },
+        "silver": {
+            "transmetro_validos": 362106,
+            "transurbano_validos": 827788,
+            "metroriel_validos": 295511,
+            "aerometro_validos": 203554,
+            "versiones_scd2": 28844
+        },
+        "cuarentena": {
+            "total": 9707
+        },
+        "gold": {
+            "dim_tiempo": 45,
+            "dim_usuario": 70380,
+            "dim_zona": 15,
+            "dim_modo_transporte": 4,
+            "dim_punto_servicio": 468,
+            "fact_abordajes": 1393448,
+            "fact_viajes_metroriel": 295511
+        },
+        "padron": {
+            "versiones_actuales": 22462,
+            "activos": 19469,
+            "inactivos": 2993
+        },
+        "calidad": {
+            "COD_PARADA_NULO": 4189,
+            "DUPLICADO_TORNIQUETE": 1115,
+            "FECHA_FUTURA": 817,
+            "VIAJE_SIN_SALIDA": 3589
+        }
+    },
+    "tiempos_segundos": {
+        "validar_bronze": 0.4,
+        "cargar_cdc_staging": 2.51,
+        "aplicar_cdc": 12.79,
+        "catalogos_usuarios": 6.07,
+        "operaciones_staging": 53.1,
+        "catalogos_staging": 1.67,
+        "dbt_run": 17.9,
+        "dbt_test": 7.05
+    },
+    "duracion_total_segundos": 101.98
+}
