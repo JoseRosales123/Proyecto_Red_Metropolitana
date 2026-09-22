@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: dim_tiempo
+    description: >
+      Dimension calendario compartida por los procesos de abordajes
+      y viajes de la Red Metropolitana.
+
+    columns:
+
+      - name: tiempo_key
+        data_tests:
+          - not_null
+          - unique
+
+      - name: fecha
+        data_tests:
+          - not_null
+          - unique
+
+      - name: anio
+        data_tests:
+          - not_null
+
+      - name: mes_numero
+        data_tests:
+          - not_null

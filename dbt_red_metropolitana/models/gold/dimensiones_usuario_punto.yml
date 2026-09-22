@@ -1,0 +1,39 @@
+version: 2
+
+models:
+
+  - name: dim_usuario
+
+    columns:
+
+      - name: usuario_key
+        data_tests:
+          - not_null
+          - unique
+
+      - name: usuario_integrado_aprox
+        data_tests:
+          - not_null
+          - unique
+
+
+  - name: dim_punto_servicio
+
+    columns:
+
+      - name: punto_servicio_key
+        data_tests:
+          - not_null
+          - unique
+
+      - name: modo_key
+        data_tests:
+          - not_null
+
+      - name: punto_id
+        data_tests:
+          - not_null
+
+      - name: zona_key
+        data_tests:
+          - not_null
