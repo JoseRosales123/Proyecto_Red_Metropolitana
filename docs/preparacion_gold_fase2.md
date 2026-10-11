@@ -58,3 +58,71 @@ Posteriormente se agregaron pruebas específicas para:
 - no nulidad de `tiene_servicio`.
 
 El modelo actualizado permite que el tablero de Tableau responda correctamente qué zonas tienen cobertura y cuáles quedan fuera de la red integrada.
+
+## 2. Granularidad temporal para análisis de demanda
+
+Durante la revisión de la capa Gold se identificó que `dim_tiempo` tenía inicialmente un grano diario. La dimensión contenía 45 registros, uno por cada fecha del período analizado.
+
+Aunque las tablas de hechos conservaban los timestamps completos de los abordajes y viajes, la relación con `dim_tiempo` se realizaba únicamente por fecha. Esto impedía utilizar la dimensión para analizar directamente la demanda por hora y clasificar los registros según hora pico.
+
+### Modificación realizada
+
+Se cambió el grano de `dim_tiempo` a:
+
+**Una fila por combinación de fecha y hora.**
+
+Para cada uno de los 45 días del período se generaron las 24 horas del día, obteniendo 1,080 registros.
+
+La dimensión incorpora ahora:
+
+- `hora`, con valores entre 0 y 23;
+- `fecha_hora_inicio`, que representa el inicio de cada hora;
+- `es_dia_habil`, para diferenciar lunes a viernes de fines de semana;
+- `es_hora_pico`, para identificar las franjas de mayor demanda.
+
+La llave `tiempo_key` también fue ampliada para representar fecha y hora. Por ejemplo:
+
+`2026060107`
+
+representa el 1 de junio de 2026 a las 07:00.
+
+### Definición de hora pico
+
+La definición se basó en la distribución utilizada por el generador de datos del proyecto, el cual simula dos períodos de mayor demanda durante el día.
+
+Se clasificaron como horas pico:
+
+- 05:00 a 08:59
+- 16:00 a 19:59
+
+El resto de horas se consideran fuera de hora pico.
+
+Para `es_dia_habil` se consideran hábiles los días de lunes a viernes. No se incorporó un calendario de días festivos debido a que esa información no forma parte de los datos proporcionados.
+
+### Integración con las tablas de hechos
+
+`fact_abordajes` se relaciona ahora con la dimensión utilizando la fecha y la hora de `fecha_hora_local`.
+
+Para MetroRiel se utiliza la fecha y hora de `entry_ts`, por lo que el momento temporal asociado al viaje corresponde al inicio del trayecto.
+
+Después de reconstruir los modelos se conservaron los conteos originales:
+
+- `fact_abordajes`: 1,393,448 registros.
+- `fact_viajes_metroriel`: 295,511 registros.
+
+La dimensión `dim_tiempo` pasó de 45 a 1,080 registros.
+
+### Validación
+
+Se verificó que:
+
+- existen 45 fechas distintas;
+- cada fecha cuenta con las 24 horas;
+- la hora mínima es 0 y la máxima es 23;
+- existen 360 combinaciones fecha-hora clasificadas como hora pico;
+- existen 792 combinaciones correspondientes a días hábiles;
+- las horas pico corresponden únicamente a 5, 6, 7, 8, 16, 17, 18 y 19.
+
+Las pruebas de dbt asociadas a la dimensión tiempo y sus tablas de hechos finalizaron correctamente sin errores.
+
+Este cambio permite analizar desde Tableau cuándo se concentra la demanda y comparar el comportamiento entre horas pico y períodos de menor demanda.

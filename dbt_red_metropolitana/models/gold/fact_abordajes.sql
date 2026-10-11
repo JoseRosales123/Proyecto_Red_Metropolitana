@@ -122,6 +122,7 @@ dimensionado as (
 
     left join {{ ref('dim_tiempo') }} t
         on t.fecha = a.fecha_hora_local::date
+       and t.hora = extract(hour from a.fecha_hora_local)::integer
 
     left join {{ ref('dim_modo_transporte') }} m
         on m.modo_transporte = a.modo_transporte

@@ -70,6 +70,7 @@ dimensionado as (
 
     left join {{ ref('dim_tiempo') }} t
         on t.fecha = v.entry_ts::date
+       and t.hora = extract(hour from v.entry_ts)::integer
 
     left join {{ ref('dim_modo_transporte') }} m
         on m.modo_transporte = 'MetroRiel'

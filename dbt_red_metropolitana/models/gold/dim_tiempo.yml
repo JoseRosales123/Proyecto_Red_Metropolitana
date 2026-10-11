@@ -3,8 +3,9 @@ version: 2
 models:
   - name: dim_tiempo
     description: >
-      Dimension calendario compartida por los procesos de abordajes
-      y viajes de la Red Metropolitana.
+      Dimension temporal compartida por los procesos de abordajes
+      y viajes de la Red Metropolitana. Su grano es una combinación
+      única de fecha y hora.
 
     columns:
 
@@ -16,6 +17,14 @@ models:
       - name: fecha
         data_tests:
           - not_null
+
+      - name: hora
+        data_tests:
+          - not_null
+
+      - name: fecha_hora_inicio
+        data_tests:
+          - not_null
           - unique
 
       - name: anio
@@ -23,5 +32,13 @@ models:
           - not_null
 
       - name: mes_numero
+        data_tests:
+          - not_null
+
+      - name: es_dia_habil
+        data_tests:
+          - not_null
+
+      - name: es_hora_pico
         data_tests:
           - not_null

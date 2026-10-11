@@ -44,14 +44,45 @@ calendario as (
 
     from limites
 
+),
+
+horas as (
+
+    select
+        generate_series(0, 23)::integer as hora
+
+),
+
+calendario_horario as (
+
+    select
+        c.fecha,
+        h.hora
+
+    from calendario c
+    cross join horas h
+
 )
 
 select
 
-    to_char(fecha, 'YYYYMMDD')::integer
-        as tiempo_key,
+    (
+        to_char(fecha, 'YYYYMMDD')
+        || lpad(hora::text, 2, '0')
+    )::bigint as tiempo_key,
 
     fecha,
+
+    hora,
+
+    make_timestamp(
+        extract(year from fecha)::integer,
+        extract(month from fecha)::integer,
+        extract(day from fecha)::integer,
+        hora,
+        0,
+        0
+    ) as fecha_hora_inicio,
 
     extract(year from fecha)::integer
         as anio,
@@ -97,6 +128,19 @@ select
         when extract(isodow from fecha) in (6, 7)
             then true
         else false
-    end as es_fin_semana
+    end as es_fin_semana,
 
-from calendario
+    case
+        when extract(isodow from fecha) between 1 and 5
+            then true
+        else false
+    end as es_dia_habil,
+
+    case
+        when hora between 5 and 8
+          or hora between 16 and 19
+            then true
+        else false
+    end as es_hora_pico
+
+from calendario_horario
