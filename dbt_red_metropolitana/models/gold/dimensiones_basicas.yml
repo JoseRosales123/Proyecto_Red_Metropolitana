@@ -30,3 +30,16 @@ models:
         data_tests:
           - not_null
           - unique
+
+      - name: tipo_zona
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - ZONA_URBANA
+                  - MUNICIPIO_SECTOR
+
+      - name: tiene_servicio
+        data_tests:
+          - not_null
