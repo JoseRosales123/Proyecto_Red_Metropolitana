@@ -1,7 +1,8 @@
 with base as (
 
     select
-        usuario_integrado_aprox,
+
+        usuario_seudonimo,
 
         count(distinct sistema) as cantidad_sistemas,
 
@@ -9,11 +10,13 @@ with base as (
             distinct sistema,
             ', '
             order by sistema
-        ) as sistemas_asociados
+        ) as sistemas_asociados,
 
-    from {{ ref('silver_identidad_usuarios') }}
+        max(estrategia_identidad) as estrategia_identidad
 
-    group by usuario_integrado_aprox
+    from {{ ref('silver_identidad_usuarios_seudonimizada') }}
+
+    group by usuario_seudonimo
 
 ),
 
@@ -22,10 +25,10 @@ dimension as (
     select
 
         row_number() over (
-            order by usuario_integrado_aprox
+            order by usuario_seudonimo
         )::bigint as usuario_key,
 
-        usuario_integrado_aprox,
+        usuario_seudonimo,
 
         cantidad_sistemas,
 
@@ -35,12 +38,7 @@ dimension as (
             cantidad_sistemas > 1
         ) as es_multimodal_aprox,
 
-        case
-            when usuario_integrado_aprox like 'AM:%'
-                then 'IDENTIDAD_SEPARADA_AEROMETRO'
-
-            else 'IDENTIDAD_NUMERICA_APROX'
-        end as estrategia_identidad
+        estrategia_identidad
 
     from base
 

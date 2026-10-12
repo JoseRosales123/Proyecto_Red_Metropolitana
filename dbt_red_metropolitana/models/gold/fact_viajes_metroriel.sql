@@ -28,11 +28,11 @@ con_identidad as (
 
         v.*,
 
-        i.usuario_integrado_aprox
+        i.usuario_seudonimo
 
     from viajes v
 
-    left join {{ ref('silver_identidad_usuarios') }} i
+    left join {{ ref('silver_identidad_usuarios_seudonimizada') }} i
         on i.sistema = 'MetroRiel'
        and i.llave_original = v.usuario_fuente
 
@@ -65,8 +65,7 @@ dimensionado as (
     from con_identidad v
 
     left join {{ ref('dim_usuario') }} u
-        on u.usuario_integrado_aprox =
-           v.usuario_integrado_aprox
+        on u.usuario_seudonimo = v.usuario_seudonimo
 
     left join {{ ref('dim_tiempo') }} t
         on t.fecha = v.entry_ts::date

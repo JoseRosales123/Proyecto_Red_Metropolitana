@@ -88,11 +88,11 @@ con_identidad as (
 
         a.*,
 
-        i.usuario_integrado_aprox
+        i.usuario_seudonimo
 
     from abordajes a
 
-    left join {{ ref('silver_identidad_usuarios') }} i
+    left join {{ ref('silver_identidad_usuarios_seudonimizada') }} i
         on i.sistema = a.modo_transporte
        and i.llave_original = a.usuario_fuente
 
@@ -117,8 +117,7 @@ dimensionado as (
     from con_identidad a
 
     left join {{ ref('dim_usuario') }} u
-        on u.usuario_integrado_aprox =
-           a.usuario_integrado_aprox
+        on u.usuario_seudonimo = a.usuario_seudonimo
 
     left join {{ ref('dim_tiempo') }} t
         on t.fecha = a.fecha_hora_local::date
